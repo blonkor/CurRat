@@ -2,35 +2,32 @@ import React from "react";
 
 class Select extends React.Component {
   state = {
-    tech: ["EUR","USD","UAH"]
+    tech: ["EUR","USD","UAH"],
+    value: 0
   };
 
-  handleChange(e){
-    let names = this.state.tech,
-    val = e.target.value;
-    const index = +e.target.id;
+  handleChange = (e) => {
+    var names = this.state.tech;
+    var val = e.target.value;
+    const index = e.target.id;
     names[index] = val;
     this.setState({
         tech: names
     });
-    {this.props.Curr(this.state.tech)};
+    {this.props.curr(this.state.tech)};
   }
-
+  
   render(){
+    const {onInputChange,inputValue,item} = this.props;
+    const body = this.state.tech.map((article,index) =>
+      <div>
+        <select onChange = {this.handleChange} id={index} value={article}>{item}</select>
+        <input type = "number" onChange={onInputChange(index,this.state.tech)} value={inputValue[index]} />
+      </div>
+    )
     return (
       <div>
-        <div id = "0">
-          <select onChange = {this.handleChange.bind(this)} value = {this.state.tech[0]}> {this.props.item} </select>
-          <input type = "number" value = {this.props.curVal[0]} onChange = {this.props.Change(0)}/>
-        </div>
-        <div id = "1">
-          <select onChange = {this.handleChange.bind(this)} value = {this.state.tech[1]}> {this.props.item} </select>
-          <input type="number" value = {this.props.curVal[1]} onChange = {this.props.Change(1)}/>
-        </div>
-        <div id = "2">
-          <select onChange={this.handleChange.bind(this)} value = {this.state.tech[2]}> {this.props.item} </select>
-          <input type = "number" value = {this.props.curVal[2]} onChange = {this.props.Change(2)} />
-        </div>
+        {body}
       </div>
     )
   }
